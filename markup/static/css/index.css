@@ -1,0 +1,25 @@
+table {
+	width:100%;
+	height:100%;
+	border: 1px solid grey;
+	text-align:center;
+}
+th {
+	height:3.4%;
+	border:1px dotted black;
+	border-radius:2%;
+}
+.styleCell {
+	height: 2%;
+	border:1px solid grey;
+}
+.styleCell:hover { 
+	background-color:lightblue;
+}
+#navigator {
+	text-align: center;
+	font-size: 2.8rem;
+	padding-bottom: 2%;
+	border-bottom: solid black 2px;
+}
+
