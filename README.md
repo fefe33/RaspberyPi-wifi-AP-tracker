@@ -11,7 +11,7 @@
 
 <h2>requirements:</h2>
 <p>nmcli, python3, flask</p>
-<p>this app was initially tested on a raspberry pi 4, but should work on any linux distro that has nmcli installed, python support, and a functional wifi adapter</p>
+<p>this app was initially tested on a raspberry pi 4 (raspbian 32 bit to be precise), but should work on any PC with a functional wifi adapater running a linux distro that has nmcli installed and python support</p>
 <h2>how to use</h2>
 <h3>to use the logger:</h3>
 <ul>
