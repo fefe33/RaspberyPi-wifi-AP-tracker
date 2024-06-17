@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<title>AP logger</title>
+	<link rel='stylesheet' href='/static/css/index.css'>
+</head>
+<body>
+	<section id='nav'>
+		<div id='navigator'>
+			<a href='/signal'>chart</a>
+		</div>
+	</section>
+	<section>
+		<table>
+			<thead>
+				<th><h1>-- BSSID --</h1></th>
+				<th><h1>-- SSID --</h1></th>
+				<th><h1>-- Mode --</h1></th>
+				<th><h1>-- Channel --</h1></th>
+				<th><h1>-- Time of Scan --</h1></th>
+			</thead>
+			<tbody id='append_rows' data-defaultrate=30>
+			</tbody>
+		</table>
+	</section>
+	<script type='text/javascript' src='/static/js/index.js'></script>
+</body>
+
+</html>
