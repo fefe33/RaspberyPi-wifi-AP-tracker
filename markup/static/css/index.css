@@ -22,4 +22,9 @@ th {
 	padding-bottom: 2%;
 	border-bottom: solid black 2px;
 }
-
+button {
+	width: 8%;
+	height: 3%;
+	padding:1.8%;
+	font-size: large;
+}
