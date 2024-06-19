@@ -66,13 +66,17 @@ def sig_log():
     total_scans = len(scan_timestamps)
     #
     #get bssids and write to var
-    c.execute('SELECT bssid,discovered_at FROM known')
+    c.execute('SELECT bssid,ssid,discovered_at FROM known')
     bssids = c.fetchall()
-    tms = [i[1] for i in bssids]
+    tms = [i[2] for i in bssids]
+    ssids = [i[1] for i in bssids]
     bssids = [i[0] for i in bssids]
+    resolutions = dict()
     dataset = dict()
     #for each bssid, select all non-bssid values from the signals table
     for i in range(len(bssids)):
+        #build the resolutions object
+        resolutions[bssids[i]] = ssids[i]
         c.execute('SELECT signal,scan_number FROM signals WHERE bssid={}'.format(repr(bssids[i])))
         #convert the scan numbers to timestamps by fetching from the global table
 
@@ -80,7 +84,7 @@ def sig_log():
 
         dataset[bssids[i]] = {'discoveredAt':tms[i], 'data':c.fetchall()}
     c.close()
-    return json.dumps({'dataset':dataset, 'bssids':bssids, 'total_scans': total_scans, 'labels':scan_timestamps})
+    return json.dumps({'dataset':dataset, 'bssids':bssids, 'total_scans': total_scans, 'labels':scan_timestamps, 'resolve':resolutions})
 
 if '__main__' in __name__:
     server.run(host=host, port=port)
