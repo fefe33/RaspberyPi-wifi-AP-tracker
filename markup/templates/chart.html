@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>line plot</title>
+	<meta charset="UTF-8">
+	<title>signal history</title>
+	<link rel='stylesheet' href='/static/css/chart.css'>
 </head>
+
 <body>
-    <div id="append_canvas">
-        <canvas id="container"></canvas>
-    </div>
+	<div id='nav'>
+		<button id='home'>home</button>
+		<button id='stats'>stats</button>
+	</div>	
+	<div id='myModal' class='modal'>
+		<div class='modal-content'>
+			<span class='close'>&times;</span>
+			<div id='displayStats'>
+				<table id='mainTable'>
+					<thead>
+						<th id='maintd0'><h2>access points</h2></th>
+						<th id='maintd1'>
+							<!-- this is the stats table-->
+							<table id='subHeader'>
+								<thead>
+								<th class='subtd'><h3>avg</h3></td>
+								<th class='subtd'><h3>max</h3></td>
+								<th class='subtd'><h3>min</h3></td>
+								</thead>
+							</table>
+						</th>
+					</thead>
+					<tbody id='appendTo'>
+								
+					</tbody>
+					
+				</table>	
+			</div>
+		</div>
+	</div>
+	<div id="append_canvas">
+		<canvas id="container"></canvas>
+	</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script src="/static/js/sigchart.js">
-    </script>
+	<script src="/static/js/sigchart.js">
+	</script>
 
 </body>
 </html>
