@@ -1,9 +1,7 @@
 '''
     this app continually requests nearby networks and logs them to a database at a given frequency
-    2 tables exist. one for all values collectively learned and one for those that were present as of the last scan
+    3 tables exist. one for all values collectively learned, one for the signal strength of each access point at a relative scan number, and one for all collective scans and their timestamps
     a separate server can be run to view detected changes and timestamps live
-    
-    
 '''
 import time, os, argparse, subprocess, sqlite3
 
