@@ -77,3 +77,7 @@ function run() {
 }
 run()
 
+// add the button listener
+document.querySelector('button').onclick = ()=>{
+	window.location = '/signal'
+}
