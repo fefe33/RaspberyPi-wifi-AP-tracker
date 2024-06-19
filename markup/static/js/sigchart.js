@@ -34,7 +34,8 @@ ChartManager = ()=>{
 		}
 		return a
 	}
-	
+	//resolve
+	//selects a random color
 	let getColor = (n)=>{return colors[n % colors.length]}
 	//function to retrieve and parse the signal data 
 	let buildChart = async ()=>{
@@ -54,7 +55,7 @@ ChartManager = ()=>{
 					v.unshift([0, j])
 				}
 			}
-			// if the dataset doesnt match the total scan length assure the set of values isnt missing any values intermittently
+			// if the dataset doesnt match the total scan length assure the set of values isnt missing values intermittently
 			if (v.length !== ds.total_scans) {
 				fillTheBlank(v)
 				console.log('post alg: ', v)
@@ -64,7 +65,12 @@ ChartManager = ()=>{
 			for (j of v) {
 				nv.push(j[0])
 			}
-			datasets.push(makeDataSet(ii, nv, getColor(cnt)))
+			//try to resolve the bssid to a name that isnt '--'
+			resolvedName = ds.resolve[ii]
+			if (resolvedName==='--') { 
+				resolvedName = ii
+			}
+			datasets.push(makeDataSet(resolvedName, nv, getColor(cnt)))
 			
 			cnt++
 		}
@@ -76,7 +82,7 @@ ChartManager = ()=>{
 			d = new Date(0)
 			d.setUTCSeconds(i)
 			d = d.toString().split(' ')
-			d = `${d[1]} ${d[2]} ${d[3]} ${d[4]}`
+			d = `${d[4]}`
 			labels.push(d)
 		}
 
@@ -134,11 +140,93 @@ ChartManager = ()=>{
 
 	}	
 
+
 	return {'makeChart': makeChart, 'makeDataSet':makeDataSet, 'appendToChart':appendToChart, 'renderChart':buildChart, 'fillTheBlank': fillTheBlank}
 }
-let run = ()=> {
+//set of functions to calculate chart statistics and write them to the modal
+let statistics = ()=> {
+	let writeRow = (dataset, avg, max, min)=>{
+		appendTo = document.querySelector('#appendTo')
+		//create main row elements
+		let row = document.createElement('tr')
+		let td = [document.createElement('td'), document.createElement('td')]
+		td[1].style.padding = '0%'
+		td[0].innerText = dataset
+		//create the subtable and its necessary elements
+		let subtable = document.createElement('table')
+		subtable.style['table-layout'] = 'fixed'
+		let subtbody = document.createElement('tbody')
+		let subrow = document.createElement('tr')
+		let subCells = [document.createElement('td'), document.createElement('td'), document.createElement('td')]
+		//set the text
+		subCells[0].innerText = avg
+		subCells[1].innerText = max
+		subCells[2].innerText = min
+		//build the table
+		for (i of subCells) {
+			i.style.padding = '2.3%'
+			i.style.width = '33%'
+			subrow.appendChild(i)
+		}
+		subtbody.appendChild(subrow)
+		subtable.append(subtbody)
+		//append the table to the second td and the tds to the tr
+		td[1].appendChild(subtable)
+		for (i of td) {
+			row.appendChild(i)
+		}
+		appendTo.appendChild(row)
+	}
+
+
+
+	let getStats = (chart)=> {
+		let max, min, sum
+		let stats = []
+		for (i of chart.data.datasets) {
+			max = i.data[0], min = i.data[0], sum = 0
+			for (j=0;j<i.data.length;j++) {
+				sum = sum+i.data[j]
+				if (i.data[j] > max) {
+					max = i.data[j]
+				}
+				if (i.data[j] < min) {
+					min = i.data[j]
+				}
+			}
+			avg = sum/i.data.length
+			//round it to 2 decimal places
+			avg = Math.round(avg*100)/100
+			stats.push({'dataset':i.label, 'stats':{'avg':avg, 'max': max, 'min':min}})
+		}
+		return stats
+	}
+	let writeStats = (chart)=>{
+		//get the stats
+		stats = getStats(chart)
+		//clear the rows
+		document.querySelector('#appendTo').innerHTML = ''
+		for (i of stats) {
+			writeRow(i.dataset, i.stats['avg'], i.stats['max'], i.stats['min'])
+		}
+	}
+	return {'getStats': getStats, 'writeRow':writeRow, 'writeStats':writeStats}
+}
+
+let run = async ()=> {
+	//render the chart
 	cm = ChartManager()
-	chart = cm.renderChart()
+	chart = await cm.renderChart()
+	//get the statistics functions
+	s = statistics()
+	//add the event listeners
+	//home
+	document.querySelector('button#home').onclick = ()=>{window.location = '/'};
+	//stats and close-stats btn
+	document.querySelector('button#stats').onclick = ()=>{s.writeStats(chart);document.querySelector('#myModal').style.display = 'block'};
+	document.querySelector('span.close').onclick = ()=>{document.querySelector('#myModal').style.display = 'none'};
+	//return the chart manager and chart objects
 	return {'manager':cm, 'chart': chart}
 }
 app = run()
+
